@@ -1,0 +1,11 @@
+{
+  "id": "001_off_by_one",
+  "language": "python",
+  "description": "sum_to(n) should sum 1..n inclusive but drops the last term.",
+  "entrypoint": "solution.py",
+  "buggy_dir": "buggy",
+  "gold_dir": "gold",
+  "test_dir": "tests",
+  "difficulty": "easy",
+  "max_iterations": 6
+}

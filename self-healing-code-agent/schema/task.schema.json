@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SelfHealingCodeTask",
+  "description": "One bug-fix task for the self-healing code agent loop. The test is the ORACLE: exit code 0 means resolved. 'gold' is only used to (a) demo the harness with a perfect patcher and (b) compute an optional patch-similarity metric. The agent under test must NOT read 'gold'.",
+  "type": "object",
+  "required": ["id", "language", "entrypoint", "buggy_dir", "test_dir", "difficulty"],
+  "properties": {
+    "id": { "type": "string", "description": "Unique task id, e.g. '001_off_by_one'." },
+    "language": { "type": "string", "enum": ["python"], "description": "Only python in this starter set." },
+    "description": { "type": "string", "description": "Human-readable bug summary (context for a real LLM patcher; not the fix)." },
+    "entrypoint": { "type": "string", "description": "Relative path of the file(s) the agent may edit, e.g. 'solution.py'." },
+    "buggy_dir": { "type": "string", "description": "Dir with the broken code the loop starts from." },
+    "gold_dir": { "type": "string", "description": "Dir with a known-good version. Oracle only - hidden from the agent." },
+    "test_dir": { "type": "string", "description": "Dir with the test(s). Any test_*.py run with exit 0 == pass." },
+    "difficulty": { "type": "string", "enum": ["easy", "medium", "hard"] },
+    "max_iterations": { "type": "integer", "default": 6, "description": "Loop budget: hard stop so the loop always terminates." }
+  }
+}

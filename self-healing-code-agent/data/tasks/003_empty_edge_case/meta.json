@@ -1,0 +1,11 @@
+{
+  "id": "003_empty_edge_case",
+  "language": "python",
+  "description": "average() crashes on an empty list; should return 0.0 instead.",
+  "entrypoint": "solution.py",
+  "buggy_dir": "buggy",
+  "gold_dir": "gold",
+  "test_dir": "tests",
+  "difficulty": "medium",
+  "max_iterations": 6
+}
