@@ -66,8 +66,9 @@ class ClaudePatcher:
 
     name = "claude"
 
-    def __init__(self, model: str = "claude-opus-4-8"):
+    def __init__(self, model: str = "claude-opus-4-8", effort: str = "high"):
         self.model = model
+        self.effort = effort  # low | medium | high | xhigh | max
 
     def propose(self, ctx: PatchContext) -> dict[str, str]:
         import anthropic  # imported lazily so the offline demo needs no SDK
@@ -87,9 +88,14 @@ class ClaudePatcher:
         )
         msg = client.messages.create(
             model=self.model,
-            max_tokens=2048,
+            max_tokens=16000,
+            # Opus 4.8 runs WITHOUT thinking unless adaptive is set explicitly.
+            # Debugging from a stack trace is exactly what it helps on.
+            thinking={"type": "adaptive"},
+            output_config={"effort": self.effort},
             messages=[{"role": "user", "content": prompt}],
         )
+        # Content may interleave thinking and text blocks; only text carries the patch.
         text = "".join(block.text for block in msg.content if block.type == "text")
         return _parse_file_blocks(text)
 

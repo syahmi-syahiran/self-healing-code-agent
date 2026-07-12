@@ -38,19 +38,24 @@ def load_tasks() -> list[tuple[dict, str]]:
     return out
 
 
-def make_patcher(kind: str, task_root: str):
+def make_patcher(kind: str, task_root: str, args):
     if kind == "noop":
         return NoOpPatcher()
     if kind == "gold":
         return GoldPatcher(os.path.join(task_root, "gold"))
     if kind == "claude":
-        return ClaudePatcher()
+        return ClaudePatcher(model=args.model, effort=args.effort)
     raise SystemExit(f"unknown patcher: {kind}")
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--patcher", default="gold", choices=["noop", "gold", "claude"])
+    ap.add_argument("--model", default="claude-opus-4-8",
+                    help="model id for --patcher claude")
+    ap.add_argument("--effort", default="high",
+                    choices=["low", "medium", "high", "xhigh", "max"],
+                    help="how hard Claude thinks per attempt (--patcher claude)")
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args()
 
@@ -61,7 +66,7 @@ def main() -> None:
     results = []
     print(f"\nRunning {len(tasks)} task(s) with patcher='{args.patcher}'\n")
     for task, root in tasks:
-        patcher = make_patcher(args.patcher, root)
+        patcher = make_patcher(args.patcher, root, args)
         res = run_loop(task, root, patcher, verbose=args.verbose)
         status = "RESOLVED" if res.resolved else "unresolved"
         print(f"  {task['id']:<24} {status:<11} iters={res.iterations_used}")

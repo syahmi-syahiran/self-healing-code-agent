@@ -37,6 +37,11 @@ python score.py --patcher noop             # baseline that never fixes -> 0%
 python score.py --patcher claude           # real LLM loop (needs ANTHROPIC_API_KEY)
 ```
 
+📖 **[Full usage guide](self-healing-code-agent/USAGE.md)** — setup, CLI, Python
+API, writing your own patcher, connecting Claude, adding tasks, troubleshooting.
+🧪 **[Runnable examples](self-healing-code-agent/examples/)** — programmatic API,
+a custom patcher, the real Claude loop, and a new-task template.
+
 ## The core lesson: every loop needs an oracle
 
 A loop can only self-correct if something tells it whether the last attempt was
